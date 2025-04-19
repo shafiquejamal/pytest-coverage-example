@@ -1,0 +1,26 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-unit-tests:
+    name: run-unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pop
+          pip install poetry
+      - name: Run tests 01
+        working_directory: ./folder1/
+        run: poetry lock && poetry install && PYTHPATH=./ poetry run coverage run -m pytest -v
+      - name: Run tests 02
+        working_directory: ./folder2/
+        run: poetry lock && poetry install && PYTHPATH=./ poetry run coverage run -m pytest -v
